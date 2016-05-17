@@ -9,5 +9,9 @@
     "plist": "^1.2.0",
     "svn-spawn": "^0.1.5",
     "underscore": "^1.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BokeFE/cordova-pack.git"
   }
 }
