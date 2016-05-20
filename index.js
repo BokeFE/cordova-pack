@@ -5,6 +5,8 @@ var fs = require('fs-extra');
 var _ = require('underscore');
 var cordova = require('cordova-lib').cordova,
     ConfigParser  = require('cordova-lib').configparser;
+const plistGen = require('./plistGen.js');
+const htmlGen = require('./htmlGen.js');
 
 
 function pack(cfg){
@@ -19,17 +21,43 @@ function pack(cfg){
             cfg.winston.info("create cordova begin")
             yield o.createCordova();
             cfg.winston.info("create cordova success")
-            //TODO svn user
-            cfg.winston.info("svn checkout app files begin")
-            yield o.emptyDir(o.svnDir);
-            yield o.getSvn(o.baseSvn,o.svnDir, 'zhouzy','zhouzy');
-            cfg.winston.info("svn checkout app files success")
-            cfg.winston.info("svn checkout project files begin")
-            yield o.emptyDir(o.projectDir);
-            yield o.getSvn(o.projectSvn, o.projectDir,  'zhouzy','zhouzy');
-            cfg.winston.info("svn checkout project files success")
+            console.log("create cordova success")
+            ////TODO svn user
+
+            /*//Yigo 1.6
+             cfg.winston.info("svn checkout app files begin")
+             yield o.emptyDir(o.svnDir);
+             yield o.getSvn(o.baseSvn,o.svnDir, 'zhouzy','zhouzy');
+             cfg.winston.info("svn checkout app files success")
+             cfg.winston.info("svn checkout project files begin")
+             yield o.emptyDir(o.projectDir);
+             yield o.getSvn(o.projectSvn, o.projectDir,  'zhouzy','zhouzy');
+             cfg.winston.info("svn checkout project files success")
+             yield o.changelibConfigJSPath();*/
             yield o.processCode();
-            yield o.changelibConfigJSPath();
+            //Yigo 2.0
+            const npmCmd = require('npm-spawn');
+            var options = {cwd:'src'};
+
+            //get source code
+            cfg.winston.info("download source code begin")
+            yield o.emptyDir('src');
+            yield o.getSvn(o.baseSvn,'src', 'zhouzy','zhouzy');
+            cfg.winston.info("download source code success");
+            //npm install
+            yield o.emptyDir(o.svnDir);
+            yield npmCmd(['install'], options);
+            //npm run build
+            options.env = {
+                DEST_DIR:`../${o.appName}/www`
+            };
+            console.log(o.svnDir);
+            console.log(options);
+            yield npmCmd(['run','build'], options);
+            //
+            console.log('npm run build success');
+            console.log(process.cwd())
+            console.log(o.appName);
             process.chdir(o.appName);
             yield o.addPlatform();
             yield o.addPlugin();
@@ -41,6 +69,16 @@ function pack(cfg){
             yield o.addKey();
             yield o.buildApp();
             yield o.releaseFile();
+            //ios manifest.plist generater
+            if(o.appPlatform === 'ios'){
+                var dest = o.ipaLink;
+                var reg = new RegExp('^(.+)\/(?:[^/]+)$');
+                dest = reg.exec(s)[1];
+                yield plistGen(o);
+                yield htmlGen();
+                fs.copy('manifest.plist', dest);
+                fs.copy('index.html', dest);
+            }
 
             process.chdir('../..');
             yield o.emptyDir('working');
@@ -64,18 +102,18 @@ function pack(cfg){
     o.baseSvnUser = 'zhouzy';
     o.baseSvnPassword = 'zhouzy';
     o.configXML = o.appName + '/config.xml';
-    o.projectDirName = function(){
-        var projectDirName = o.projectSvn;
-        if( projectDirName.split('/').slice(-1).toString().length < 1 ){
-            projectDirName = projectDirName.split('/').slice(-2,-1);
-        }else{
-            projectDirName = projectDirName.split('/').slice(-1);
-        }
-        projectDirName = projectDirName.toString();
-        return projectDirName;
-    };
+    //o.projectDirName = function(){
+    //    var projectDirName = o.projectSvn;
+    //    if( projectDirName.split('/').slice(-1).toString().length < 1 ){
+    //        projectDirName = projectDirName.split('/').slice(-2,-1);
+    //    }else{
+    //        projectDirName = projectDirName.split('/').slice(-1);
+    //    }
+    //    projectDirName = projectDirName.toString();
+    //    return projectDirName;
+    //};
     o.projectPath = o.svnDir + '/js/lib/';
-    o.projectDir = o.svnDir + '/js/lib/' + o.projectDirName();
+    //o.projectDir = o.svnDir + '/js/lib/' + o.projectDirName();
     o.libConfigJSPath = o.svnDir + '/js/lib/config/config.js';
     o.platform = cfg.appPlatform;
     o.appBuildType = cfg.appBuildType;
@@ -115,20 +153,20 @@ function pack(cfg){
 
         });
     };
-    //Change cordova/www/js/lib/config/config.js
-    o.changelibConfigJSPath = function(){
-        return new Promise(function (resolve, reject) {
-            var configJs = 'define(["lib/' + o.projectDirName() + '/config"],function(config) {\n' +
-                '    return config;\n' +
-                '});';
-            fs.writeFile(o.libConfigJSPath, configJs,function(err, data) {
-                if(err){
-                    reject(new Error(err))
-                }
-                resolve(data);
-            });
-        });
-    };
+    ////Change cordova/www/js/lib/config/config.js
+    //o.changelibConfigJSPath = function(){
+    //    return new Promise(function (resolve, reject) {
+    //        var configJs = 'define(["lib/' + o.projectDirName() + '/config"],function(config) {\n' +
+    //            '    return config;\n' +
+    //            '});';
+    //        fs.writeFile(o.libConfigJSPath, configJs,function(err, data) {
+    //            if(err){
+    //                reject(new Error(err))
+    //            }
+    //            resolve(data);
+    //        });
+    //    });
+    //};
     o.createCordova = function (){
         return new Promise(function (resolve, reject) {
             cordova.create(o.appName, o.appNameSpace,o.appName,  function (err, data) {
@@ -149,7 +187,11 @@ function pack(cfg){
             if (o.appDescription) conf.setDescription(o.appDescription);
             //TODO icon
             var icons = conf.getIcons(o.appPlatform);
-            conf.addElement('icon',{'src':o.appIcon});
+            console.log('icons');
+            console.log(o.appIcon);
+            if(o.appIcon){
+                conf.addElement('icon',{'src':o.appIcon});
+            }
             //TODO access
             conf.addElement('access',{'origin':'cdvfile://*'});
             //TODO content
@@ -160,18 +202,18 @@ function pack(cfg){
             conf.addElement('preference',{'name':'Orientation','value':'portrait'});
             conf.addElement('allow-navigation',{'href':'*'});
             //splash image
-/*            var splashImage = '<splash src="res/ios/Default~iphone.png" width="320" height="480"/>\
-                <splash src="../../res/ios/Default@2x~iphone.png" width="640" height="960"/>\
-                <splash src="../../res/ios/Default-Portrait~ipad.png" width="768" height="1024"/>\
-                <splash src="../../res/ios/Default-Portrait@2x~ipad.png" width="1536" height="2048"/>\
-                <splash src="../../res/ios/Default-Landscape~ipad.png" width="1024" height="768"/>\
-                <splash src="../../res/ios/Default-Landscape@2x~ipad.png" width="2048" height="1536"/>\
-                <splash src="../../res/ios/Default-568h@2x~iphone.png" width="640" height="1136"/>\
-                <splash src="../../res/ios/Default-667h.png" width="750" height="1334"/>\
-                <splash src="../../res/ios/Default-736h.png" width="1242" height="2208"/>\
-                <splash src="../../res/ios/Default-Landscape-736h.png" width="2208" height="1242"/>';
-            conf.addElement('platform',{'name':'ios','value':splashImage});
-            conf.addElement('preference',{'name':'AutoHideSplashScreen','value':'true'});*/
+            /*            var splashImage = '<splash src="res/ios/Default~iphone.png" width="320" height="480"/>\
+             <splash src="../../res/ios/Default@2x~iphone.png" width="640" height="960"/>\
+             <splash src="../../res/ios/Default-Portrait~ipad.png" width="768" height="1024"/>\
+             <splash src="../../res/ios/Default-Portrait@2x~ipad.png" width="1536" height="2048"/>\
+             <splash src="../../res/ios/Default-Landscape~ipad.png" width="1024" height="768"/>\
+             <splash src="../../res/ios/Default-Landscape@2x~ipad.png" width="2048" height="1536"/>\
+             <splash src="../../res/ios/Default-568h@2x~iphone.png" width="640" height="1136"/>\
+             <splash src="../../res/ios/Default-667h.png" width="750" height="1334"/>\
+             <splash src="../../res/ios/Default-736h.png" width="1242" height="2208"/>\
+             <splash src="../../res/ios/Default-Landscape-736h.png" width="2208" height="1242"/>';
+             conf.addElement('platform',{'name':'ios','value':splashImage});
+             conf.addElement('preference',{'name':'AutoHideSplashScreen','value':'true'});*/
 
 
             conf.write();
@@ -182,7 +224,7 @@ function pack(cfg){
                 });
                 if ($) {
                     var splash =
-                    '<platform name="ios">'+
+                        '<platform name="ios">'+
                         '<splash src="../../res/ios/Default~iphone.png" width="320" height="480"/>'+
                         '<splash src="../../res/ios/Default@2x~iphone.png" width="640" height="960"/>'+
                         '<splash src="../../res/ios/Default-Portrait~ipad.png" width="768" height="1024"/>'+
@@ -193,7 +235,7 @@ function pack(cfg){
                         '<splash src="../../res/ios/Default-667h.png" width="750" height="1334"/>'+
                         '<splash src="../../res/ios/Default-736h.png" width="1242" height="2208"/>'+
                         '<splash src="../../res/ios/Default-Landscape-736h.png" width="2208" height="1242"/>'+
-                    '</platform>';
+                        '</platform>';
                     $('widget').append(splash);
                     fs.writeFile(o.configXML,$.xml(),function(err,data){
                         if (err) {
@@ -318,6 +360,7 @@ function pack(cfg){
                     console.error(err.stack)
                     reject(new Error(err))
                 }
+                cfg.winston.info(`add plugin ${plugin} success`);
                 resolve(data);
             });
         });
