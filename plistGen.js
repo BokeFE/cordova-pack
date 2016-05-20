@@ -22,10 +22,10 @@ var manifestJson = {
 };
 var assets = manifestJson.items[0].assets;
 var metadate = manifestJson.items[0].metadata;
-function plistGen(o){
+function plistGen(o,ipaUrl){
     return new Promise(function(resolve,reject){
-        assets[0].url = o.url;
-        metadate['bundle-identifier'] = o.appNameSpace;
+        assets[0].url = ipaUrl;
+        metadate['bundle-identifier'] = o.appPackageName;
         metadate['bundle-version'] = o.appVersion;
         metadate['title'] = o.appName;
         console.log(manifestJson);
@@ -41,18 +41,3 @@ function plistGen(o){
     })
 };
 module.exports = plistGen;
-//var o = {
-//    url:'d',
-//    appNameSpace:'d.d.d',
-//    appVersion:'1.0.0',
-//    appName:'Yigo2',
-//};
-//plistGen(o)
-//    .then(
-//        function(d){console.log(d)},
-//        function(e){console.log(e)}
-//    )
-//    .catch(function (error) {
-//    console.error(error);
-//    }
-//    );

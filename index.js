@@ -24,7 +24,7 @@ function pack(cfg){
             console.log("create cordova success")
             ////TODO svn user
 
-            /*//Yigo 1.6
+            /*            //Yigo 1.6
              cfg.winston.info("svn checkout app files begin")
              yield o.emptyDir(o.svnDir);
              yield o.getSvn(o.baseSvn,o.svnDir, 'zhouzy','zhouzy');
@@ -70,18 +70,26 @@ function pack(cfg){
             yield o.buildApp();
             yield o.releaseFile();
             //ios manifest.plist generater
+            console.log('');
             if(o.appPlatform === 'ios'){
                 var dest = o.ipaLink;
                 var reg = new RegExp('^(.+)\/(?:[^/]+)$');
-                dest = reg.exec(s)[1];
-                yield plistGen(o);
-                yield htmlGen();
-                fs.copy('manifest.plist', dest);
-                fs.copy('index.html', dest);
+                dest = reg.exec(dest)[1];
+                var SERVER = 'https://dev.bokesoft.com/';
+                var ipaUrl = `${SERVER}yigomobile/public/ios/${o.id}/${o.appName}-${o.appBuildType}.ipa`;
+                var plistUrl = `${SERVER}yigomobile/public/ios/${o.id}/manifest.plist`;
+                console.log(`ipaUrl ${ipaUrl}`)
+                console.log(`plistUrl ${plistUrl}`)
+                yield plistGen(o,ipaUrl);
+                yield htmlGen(plistUrl);
+                console.log('manifest.plist', dest);
+                fs.copySync('manifest.plist', dest+'/manifest.plist');
+                console.log('manifest success');
+                fs.copySync('index.html', dest+'/index.html');
             }
 
             process.chdir('../..');
-            yield o.emptyDir('working');
+            //yield o.emptyDir('working');
             return o;
         })
     };
