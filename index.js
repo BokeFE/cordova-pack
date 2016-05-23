@@ -23,38 +23,45 @@ function pack(cfg){
             cfg.winston.info("create cordova success")
             console.log("create cordova success")
             ////TODO svn user
-
-            /*            //Yigo 1.6
-             cfg.winston.info("svn checkout app files begin")
-             yield o.emptyDir(o.svnDir);
-             yield o.getSvn(o.baseSvn,o.svnDir, 'zhouzy','zhouzy');
-             cfg.winston.info("svn checkout app files success")
-             cfg.winston.info("svn checkout project files begin")
-             yield o.emptyDir(o.projectDir);
-             yield o.getSvn(o.projectSvn, o.projectDir,  'zhouzy','zhouzy');
-             cfg.winston.info("svn checkout project files success")
-             yield o.changelibConfigJSPath();*/
             yield o.processCode();
-            //Yigo 2.0
-            const npmCmd = require('npm-spawn');
-            var options = {cwd:'src'};
-
-            //get source code
-            cfg.winston.info("download source code begin")
-            yield o.emptyDir('src');
-            yield o.getSvn(o.baseSvn,'src', 'zhouzy','zhouzy');
-            cfg.winston.info("download source code success");
-            //npm install
-            yield o.emptyDir(o.svnDir);
-            yield npmCmd(['install'], options);
-            //npm run build
-            options.env = {
-                DEST_DIR:`../${o.appName}/www`
-            };
-            console.log(o.svnDir);
-            console.log(options);
-            yield npmCmd(['run','build'], options);
-            //
+            console.log(`yigo version: ${o.yigoVersion}`);
+            var yigoVersion = o.yigoVersion || 1.6;
+            switch (yigoVersion){
+                case 1.6:
+                    //Yigo 1.6
+                    cfg.winston.info("svn checkout app files begin")
+                    yield o.emptyDir(o.svnDir);
+                    yield o.getSvn(o.baseSvn,o.svnDir, 'zhouzy','zhouzy');
+                    cfg.winston.info("svn checkout app files success")
+                    cfg.winston.info("svn checkout project files begin")
+                    yield o.emptyDir(o.projectDir);
+                    yield o.getSvn(o.projectSvn, o.projectDir,  'zhouzy','zhouzy');
+                    cfg.winston.info("svn checkout project files success")
+                    yield o.changelibConfigJSPath();
+                    break;
+                case 2:
+                    //Yigo 2.0
+                    const npmCmd = require('npm-spawn');
+                    var options = {cwd:'src'};
+                    //get source code
+                    cfg.winston.info("download source code begin")
+                    yield o.emptyDir('src');
+                    yield o.getSvn(o.baseSvn,'src', 'zhouzy','zhouzy');
+                    cfg.winston.info("download source code success");
+                    //npm install
+                    yield o.emptyDir(o.svnDir);
+                    yield npmCmd(['install'], options);
+                    //npm run build
+                    options.env = {
+                        DEST_DIR:`../${o.appName}/www`
+                    };
+                    console.log(o.svnDir);
+                    console.log(options);
+                    yield npmCmd(['run','build'], options);
+                    break;
+                default:
+                    cfg.winston.info(`NOT SUPPORT Yigo${yigoVersion}`);
+            }
             console.log('npm run build success');
             console.log(process.cwd())
             console.log(o.appName);
@@ -112,24 +119,25 @@ function pack(cfg){
     o.baseSvnUser = 'zhouzy';
     o.baseSvnPassword = 'zhouzy';
     o.configXML = o.appName + '/config.xml';
-    //o.projectDirName = function(){
-    //    var projectDirName = o.projectSvn;
-    //    if( projectDirName.split('/').slice(-1).toString().length < 1 ){
-    //        projectDirName = projectDirName.split('/').slice(-2,-1);
-    //    }else{
-    //        projectDirName = projectDirName.split('/').slice(-1);
-    //    }
-    //    projectDirName = projectDirName.toString();
-    //    return projectDirName;
-    //};
+    o.projectDirName = function(){
+        var projectDirName = o.projectSvn;
+        if( projectDirName.split('/').slice(-1).toString().length < 1 ){
+            projectDirName = projectDirName.split('/').slice(-2,-1);
+        }else{
+            projectDirName = projectDirName.split('/').slice(-1);
+        }
+        projectDirName = projectDirName.toString();
+        return projectDirName;
+    };
     o.projectPath = o.svnDir + '/js/lib/';
-    //o.projectDir = o.svnDir + '/js/lib/' + o.projectDirName();
+    o.projectDir = o.svnDir + '/js/lib/' + o.projectDirName();
     o.libConfigJSPath = o.svnDir + '/js/lib/config/config.js';
     o.platform = cfg.appPlatform;
     o.appBuildType = cfg.appBuildType;
     o.appPackageName = cfg.appPackageName;
     o.appVersion = cfg.appVersion;
     o.appIosMp = cfg.appIosMp;
+    o.yigoVersion = cfg.yigoVersion;
 
     o.apkLink = cfg.apkDownloadLink;
     o.ipaLink = cfg.ipaLink;
@@ -163,20 +171,20 @@ function pack(cfg){
 
         });
     };
-    ////Change cordova/www/js/lib/config/config.js
-    //o.changelibConfigJSPath = function(){
-    //    return new Promise(function (resolve, reject) {
-    //        var configJs = 'define(["lib/' + o.projectDirName() + '/config"],function(config) {\n' +
-    //            '    return config;\n' +
-    //            '});';
-    //        fs.writeFile(o.libConfigJSPath, configJs,function(err, data) {
-    //            if(err){
-    //                reject(new Error(err))
-    //            }
-    //            resolve(data);
-    //        });
-    //    });
-    //};
+    //Change cordova/www/js/lib/config/config.js
+    o.changelibConfigJSPath = function(){
+        return new Promise(function (resolve, reject) {
+            var configJs = 'define(["lib/' + o.projectDirName() + '/config"],function(config) {\n' +
+                '    return config;\n' +
+                '});';
+            fs.writeFile(o.libConfigJSPath, configJs,function(err, data) {
+                if(err){
+                    reject(new Error(err))
+                }
+                resolve(data);
+            });
+        });
+    };
     o.createCordova = function (){
         return new Promise(function (resolve, reject) {
             cordova.create(o.appName, o.appNameSpace,o.appName,  function (err, data) {

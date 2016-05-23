@@ -1,6 +1,6 @@
 {
   "name": "cordova-pack",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "dependencies": {
     "cheerio": "^0.20.0",
     "co": "^4.6.0",
