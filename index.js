@@ -81,7 +81,7 @@ function pack(cfg){
                 console.log(`ipaUrl ${ipaUrl}`)
                 console.log(`plistUrl ${plistUrl}`)
                 yield plistGen(o,ipaUrl);
-                yield htmlGen(plistUrl);
+                yield htmlGen(plistUrl, o.appName);
                 console.log('manifest.plist', dest);
                 fs.copySync('manifest.plist', dest+'/manifest.plist');
                 console.log('manifest success');

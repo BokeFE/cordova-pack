@@ -5,9 +5,9 @@ var pug = require('pug'),
     , str = require('fs').readFileSync(path, 'utf8')
     , fn = pug.compile(str, {pretty: true });
 
-function htmlGen(plistUrl){
+function htmlGen(plistUrl,appName){
     return new Promise(function(resolve,reject){
-        var locals = {plistUrl:plistUrl};
+        var locals = {plistUrl:plistUrl,appName:appName};
         var html = fn(locals);
         var fileName = 'index.html';
         fs.writeFile(fileName, html, (err) => {
@@ -19,3 +19,5 @@ function htmlGen(plistUrl){
     })
 };
 module.exports = htmlGen;
+
+//htmlGen('https://dev.bokesoft.com/yigomobile/public/ios/1463979824000/manifest.plist','车掌柜');
