@@ -5,12 +5,6 @@ var manifestJson = {
         "assets": [{
             "kind": "software-package",
             "url": "https://www.zhouzhongyuan.com/yigomobile/public/ios/1463708886000/Yigo520-debug.ipa"
-        }, {
-            "kind": "display-image",
-            "url": "https://www.zhouzhongyuan.com/image.57.jpg"
-        },{
-            "kind": "full-size-image",
-            "url": "https://www.zhouzhongyuan.com/image.512.jpg"
         }],
         "metadata": {
             "bundle-identifier": "com.bokesoft.ceo",
