@@ -1,6 +1,6 @@
 {
   "name": "cordova-pack",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "dependencies": {
     "cheerio": "^0.20.0",
     "co": "^4.6.0",
@@ -8,6 +8,7 @@
     "fs-extra": "^0.26.5",
     "plist": "^1.2.0",
     "pug": "^2.0.0-alpha7",
+    "qrcode": "^0.4.2",
     "svn-spawn": "^0.1.5",
     "underscore": "^1.8.3"
   },

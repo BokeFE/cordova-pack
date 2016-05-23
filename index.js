@@ -78,10 +78,12 @@ function pack(cfg){
                 var SERVER = 'https://dev.bokesoft.com/';
                 var ipaUrl = `${SERVER}yigomobile/public/ios/${o.id}/${o.appName}-${o.appBuildType}.ipa`;
                 var plistUrl = `${SERVER}yigomobile/public/ios/${o.id}/manifest.plist`;
+                var pageUrl = `${SERVER}yigomobile/public/ios/${o.id}/index.html`;
                 console.log(`ipaUrl ${ipaUrl}`)
                 console.log(`plistUrl ${plistUrl}`)
+                console.log(`pageUrl ${pageUrl}`)
                 yield plistGen(o,ipaUrl);
-                yield htmlGen(plistUrl, o.appName);
+                yield htmlGen(plistUrl, o.appName,pageUrl);
                 console.log('manifest.plist', dest);
                 fs.copySync('manifest.plist', dest+'/manifest.plist');
                 console.log('manifest success');

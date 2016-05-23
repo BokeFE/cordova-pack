@@ -9,6 +9,10 @@ html(lang="en")
     script.
       function isWeixinBrowser(){ return /micromessenger/i.test(navigator.userAgent); }
       window.onload = function(){
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            var ios = document.getElementsByClassName('qrcode')[0];
+            ios.style.display = 'none';
+        }
         var ios = document.getElementsByClassName('ios')[0];
         ios.addEventListener('click',function(){
           if(isWeixinBrowser()){
@@ -42,9 +46,21 @@ html(lang="en")
            margin-left: -25%;
            width: 50%;
            }
+       .qrcode{
+          position: absolute;
+          bottom: 10%;
+          left: 50%;
+          margin-left: -118px;
+        }
+        .qrcode img{
+        max-width:256px;
+        max-height:256px;
+        }
 
 
   body
     h1 #{appName}
     div
         a(class="ios" href='itms-services://?action=download-manifest&url=' + plistUrl) iOS下载
+    div(class="qrcode")
+        img(src=pageUrl alt='url qrcode')
