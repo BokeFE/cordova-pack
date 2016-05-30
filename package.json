@@ -1,10 +1,10 @@
 {
   "name": "cordova-pack",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "dependencies": {
     "cheerio": "^0.20.0",
     "co": "^4.6.0",
-    "cordova-lib": "^6.0.0",
+    "cordova-lib": "6.0.0",
     "fs-extra": "^0.26.5",
     "plist": "^1.2.0",
     "pug": "^2.0.0-alpha7",
