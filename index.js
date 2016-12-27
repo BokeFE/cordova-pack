@@ -68,6 +68,7 @@ function pack(cfg){
             process.chdir(o.appName);
             yield o.addPlatform();
             yield o.addPlugin();
+            console.log('add plugin');
             if(o.appPlatform === 'android'){
                 yield o.buildExtras(); //android
             }else if(o.appPlatform === 'ios'){
@@ -98,7 +99,7 @@ function pack(cfg){
             }
 
             process.chdir('../..');
-            //yield o.emptyDir('working');
+            yield o.emptyDir('working');
             return o;
         })
     };
@@ -287,6 +288,7 @@ function pack(cfg){
             cfg.winston.info('add platform', platform,'begin');
             cordova.platform('add', platform,{'verbose': true},function (err, data) {
                 if (err) {
+                    console.log(err);
                     reject(new Error(err))
                 }
                 cfg.winston.info('add platform',platform,'success');
@@ -334,18 +336,35 @@ function pack(cfg){
             cfg.winston.info('add plugin begin');
             var plugin = o.appPlugin;
             if( typeof plugin !='undefined' && plugin.length != 0){
-                plugin = plugin.split(',');
+                //为了兼容以前的"cordova-plugin-app-version,cordova-plugin-camera,cordova-plugin-device"类型
+                try {
+                    plugin = JSON.parse(plugin);
+                }catch (e){
+                    plugin = plugin.split(',');
+                }
+                // plugin = plugin.split(',');
+                // plugin = JSON.parse(plugin);
+                console.log(plugin);
                 //分类
                 var pluginWithVariable = [];
                 var pluginWithoutVariable = [];
+                var customPluginReg = /^https?:\/\/(www\.)?/i;
                 for(var i=0;i<plugin.length;i++){
                     if(plugin[i].indexOf('?') === -1){
-                        pluginWithoutVariable.push(pluginPre + plugin[i].toString());
+                        if(customPluginReg.test(plugin[i].toString())){
+                            pluginWithoutVariable.push(plugin[i].toString());
+                        } else {
+                            pluginWithoutVariable.push(pluginPre + plugin[i].toString());
+                        }
                     }else{
-                        pluginWithVariable.push(pluginPre + plugin[i].toString());
+                        if(customPluginReg.test(plugin[i].toString())){
+                            pluginWithVariable.push(plugin[i].toString());
+                        } else {
+                            pluginWithVariable.push(pluginPre + plugin[i].toString());
+                        }
                     }
                 }
-                console.log(pluginWithVariable);
+                console.log(pluginWithoutVariable,pluginWithVariable);
                 if(pluginWithVariable.length !== 0) {
                     for(var i=0;i<pluginWithVariable.length;i++){
                         //拆分plugin 和 variable
@@ -486,7 +505,15 @@ function pack(cfg){
             var dest;
             switch (o.platform){
                 case 'android':
-                    src = ['platforms/android/build/outputs/apk/android-',o.appBuildType,'.apk'].join('');
+                    var isCrosswalk = /crosswalk/;
+                    if( isCrosswalk.test(o.appPlugin.toString()) ){
+                        console.log('crosswalk');
+                        src = ['platforms/android/build/outputs/apk/android-armv7-',o.appBuildType,'.apk'].join('');
+
+                    }else{
+                        console.log(' no crosswalk');
+                        src = ['platforms/android/build/outputs/apk/android-',o.appBuildType,'.apk'].join('');
+                    }
                     dest = o.apkLink;
                     break;
                 case 'ios':

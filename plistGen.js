@@ -18,7 +18,10 @@ var assets = manifestJson.items[0].assets;
 var metadate = manifestJson.items[0].metadata;
 function plistGen(o,ipaUrl){
     return new Promise(function(resolve,reject){
-        assets[0].url = ipaUrl;
+        console.log(ipaUrl)
+        var url = encodeURI(ipaUrl);
+        console.log(url);
+        assets[0].url = url;
         metadate['bundle-identifier'] = o.appPackageName;
         metadate['bundle-version'] = o.appVersion;
         metadate['title'] = o.appName;
