@@ -13,7 +13,7 @@ describe("all", () => {
                 process.chdir('app');
             } )
             .then( () => {
-                    return platform.platformAdd('android');
+                    return platform.add('android');
                 }
             )
             .then((result) => {

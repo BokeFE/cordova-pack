@@ -14,6 +14,6 @@ function platformAdd(platform){
 }
 
 let platform = {
-    platformAdd,
+    add,
 }
 export default platform;
