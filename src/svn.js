@@ -1,6 +1,6 @@
 import SvnClient from 'svn-spawn';
 
-function svnGet(url,dir,username,password) {
+function get(url,dir,username,password) {
     return new Promise( (resolve, reject) => {
         const client = new SvnClient({
             cwd: dir,
@@ -16,6 +16,6 @@ function svnGet(url,dir,username,password) {
     });
 }
 let svn = {
-    get: svnGet,
+    get,
 }
 export default svn;
