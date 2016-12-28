@@ -5,8 +5,8 @@ var fs = require('fs-extra');
 var _ = require('underscore');
 var cordova = require('cordova-lib').cordova,
     ConfigParser  = require('cordova-lib').configparser;
-const plistGen = require('./plistGen.js');
-const htmlGen = require('./htmlGen.js');
+const plistGen = require('./release/plistGen.js');
+const htmlGen = require('./release/htmlGen.js');
 
 
 function pack(cfg){
