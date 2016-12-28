@@ -1,6 +1,6 @@
 import {cordova} from 'cordova-lib';
 
-function platformAdd(platform){
+function add(platform){
     console.log(platform);
     return new Promise(function (resolve, reject) {
         cordova.platform('add', platform, {'verbose': true},function (err, data) {
