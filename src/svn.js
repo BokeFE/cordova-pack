@@ -14,7 +14,7 @@ function svnGet(url,dir,username,password) {
             resolve({success: true, data: data});
         });
     });
-};
+}
 let svn = {
     get: svnGet,
 }

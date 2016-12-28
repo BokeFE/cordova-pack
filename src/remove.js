@@ -10,4 +10,5 @@ function remove( dir){
         });
     });
 }
+
 export default remove;

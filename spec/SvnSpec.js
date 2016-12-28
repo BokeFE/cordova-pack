@@ -10,6 +10,10 @@ describe("svn", () => {
                 expect(result.success).toBe(true);
                 done();
             })
+            .catch((result) => {
+                console.log("MESSAGE",result.data.message);
+                done();
+            })
     });
     it("地址错误，svn get", (done) => {
         const url = "https://dev.bokesoft.com:9443/svn/mUI/branches/projects/zij";

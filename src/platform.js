@@ -12,6 +12,6 @@ function platform(platform){
             resolve(data);
         });
     });
-};
+}
 
 export default platform;
