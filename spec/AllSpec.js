@@ -2,7 +2,7 @@ import create from '../src/create'
 import remove from '../src/remove'
 import platform from '../src/platform'
 
-describe("platform", () => {
+describe("all", () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 2*60*1000;
     it("整个项目测试", (done) => {
         remove('app')
