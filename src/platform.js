@@ -1,17 +1,19 @@
 import {cordova} from 'cordova-lib';
 
-function platform(platform){
+function platformAdd(platform){
+    console.log(platform);
     return new Promise(function (resolve, reject) {
-        var platform = platform || o.appPlatform ;
-        cordova.platform('add', platform,{'verbose': true},function (err, data) {
+        cordova.platform('add', platform, {'verbose': true},function (err, data) {
             if (err) {
                 console.log(err);
-                reject(new Error(err))
+                reject( {success: false, data: err} )
             }
-            console.log('add platform',platform,'success');
-            resolve(data);
+            resolve({success: true, data: data});
         });
     });
 }
 
+let platform = {
+    platformAdd,
+}
 export default platform;
