@@ -1,8 +1,10 @@
 import {cordova} from 'cordova-lib';
 
-function add(plugin){
+function build(platform, release){
     return new Promise( (resolve, reject) => {
-        cordova.plugin('add', plugin.name, plugin.variable, {'verbose': true}, (err, data) => {
+        console.log(platform, release);
+        cordova.build( {platforms: [platform], options:{"release":release,"silent":false,"device":true}}, (err, data) => {
+            console.log("MSG",err, data);
             if (err) {
                 console.log(err);
                 reject( {success: false, data: err} )
@@ -12,7 +14,4 @@ function add(plugin){
     });
 }
 
-let plguin = {
-    add,
-}
-export default plguin;
+export default build;
