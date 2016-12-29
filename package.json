@@ -8,6 +8,7 @@
     "pug": "^2.0.0-alpha7",
     "qrcode": "^0.4.2",
     "svn-spawn": "^0.1.5",
+    "tar": "^2.2.1",
     "underscore": "^1.8.3"
   },
   "description": "其中的依赖Cordova-lib需要修改文件才能正确使用打包功能",
@@ -52,7 +53,7 @@
     "url": "git+https://github.com/BokeFE/cordova-pack.git"
   },
   "scripts": {
-    "test":"jasmine",
+    "test": "jasmine",
     "compile": "./node_modules/.bin/babel src/platform.js --out-file platform-compiled.js"
   },
   "version": "0.1.1"
