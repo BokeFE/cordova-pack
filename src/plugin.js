@@ -15,4 +15,5 @@ function add(plugin){
 let plguin = {
     add,
 }
+
 export default plguin;

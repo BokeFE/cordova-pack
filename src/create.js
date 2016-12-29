@@ -10,6 +10,5 @@ function create( dir, optionalId, optionalName ){
         });
     });
 }
+
 export default create;
-
-
