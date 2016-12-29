@@ -21,11 +21,9 @@ function pack(project) {
                 return empty('www');
             } )
             .then( () => {
-                console.log(process.cwd());
                 // 下载基础代码
                 //处理url
                 var url = project.primaryDownloadLink;
-                console.log(url);
                 if( url.match(/^yigo/) ){
                     url = config.primaryDownloadLink[url];
                 }
