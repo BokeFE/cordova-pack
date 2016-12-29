@@ -5,6 +5,7 @@ import platform from '../src/platform'
 import plugin from '../src/plugin'
 import svn from '../src/svn'
 import build from '../src/build'
+import tar from '../src/tar'
 
 import config from '../../config/index.json'
 function pack(project) {
@@ -45,6 +46,11 @@ function pack(project) {
             .then( () => {
                 // build
                 return build(project.platform, false);
+            } )
+            .then( () => {
+                process.chdir('..');
+                // 打包整个项目以供下载
+                return tar.Pack(`${project.name}`, project.name);
             } )
             .then( (data) => {
                 resolve({success: true, data: data});
