@@ -1,5 +1,5 @@
 {
-  "main": "index.js",
+  "main": "dist/index.js",
   "dependencies": {
     "cheerio": "^0.20.0",
     "co": "^4.6.0",
@@ -57,5 +57,5 @@
     "test": "jasmine",
     "compile": "./node_modules/.bin/babel src/platform.js --out-file platform-compiled.js"
   },
-  "version": "0.2.2"
+  "version": "0.2.5"
 }

@@ -1,4 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea/
 node_modules/
-test/
+test
+dist
+紫江

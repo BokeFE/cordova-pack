@@ -1,3 +1,6 @@
 spec
-src
+src/
 dist/spec
+index.js
+.idea
+*.js.map
