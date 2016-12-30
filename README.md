@@ -1,9 +1,9 @@
 <p align="center">
  <a href="https://travis-ci.org/zhouzhongyuan/cordova-pack"><img src="https://travis-ci.org/zhouzhongyuan/cordova-pack.svg?branch=master" alt="Build Status"></a>
-[![NPM version](https://img.shields.io/npm/v/cordova-pack.svg?style=flat)](https://www.npmjs.com/package/cordova-pack)
-[![NPM version](https://img.shields.io/npm/dm/cordova-pack.svg)](https://www.npmjs.com/package/cordova-pack)
-[![NPM version](https://img.shields.io/npm/dt/cordova-pack.svg)](https://www.npmjs.com/package/cordova-pack)
-[![NPM version](https://img.shields.io/npm/l/cordova-pack.svg)](https://www.npmjs.com/package/cordova-pack)
+ <a href="https://www.npmjs.com/package/cordova-pack"><img src="https://img.shields.io/npm/v/cordova-pack.svg?style=flat" alt="Version"></a>
+ <a href="https://www.npmjs.com/package/cordova-pack"><img src="https://img.shields.io/npm/dm/cordova-pack.svg" alt="Downloads Status"></a>
+ <a href="https://www.npmjs.com/package/cordova-pack"><img src="https://img.shields.io/npm/dt/cordova-pack.svg)" alt="Downloads Status"></a>
+ <a href="https://www.npmjs.com/package/cordova-pack"><img src="https://img.shields.io/npm/l/cordova-pack.svg" alt="Build Status"></a>
 </p>
 
 
