@@ -39,7 +39,7 @@
     "tarball": "https://registry.npmjs.org/cordova-pack/-/cordova-pack-0.1.1.tgz"
   },
   "gitHead": "974813eecd408b85fa9e84eeba808478ec6cf57f",
-  "homepage": "https://github.com/BokeFE/cordova-pack#readme",
+  "homepage": "https://github.com/zhouzhongyuan/cordova-pack#readme",
   "maintainers": [
     {
       "email": "yawenzhongyuan@gmail.com",
@@ -48,14 +48,19 @@
   ],
   "name": "cordova-pack",
   "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BokeFE/cordova-pack.git"
+    "url": "git+https://github.com/zhouzhongyuan/cordova-pack.git"
   },
   "scripts": {
     "test": "jasmine",
     "compile": "./node_modules/.bin/babel src/platform.js --out-file platform-compiled.js"
   },
-  "version": "0.2.5"
+  "version": "0.2.7",
+  "keywords": [
+    "cordova",
+    "pack"
+  ],
+  "author": "Zhongyuan Zhou",
+  "license": "MIT"
 }
