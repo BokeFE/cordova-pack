@@ -2,7 +2,7 @@
  <a href="https://travis-ci.org/zhouzhongyuan/cordova-pack"><img src="https://travis-ci.org/zhouzhongyuan/cordova-pack.svg?branch=master" alt="Build Status"></a>
  <a href="https://www.npmjs.com/package/cordova-pack"><img src="https://img.shields.io/npm/v/cordova-pack.svg?style=flat" alt="Version"></a>
  <a href="https://www.npmjs.com/package/cordova-pack"><img src="https://img.shields.io/npm/dm/cordova-pack.svg" alt="Downloads Monthly"></a>
- <a href="https://www.npmjs.com/package/cordova-pack"><img src="https://img.shields.io/npm/dt/cordova-pack.svg)" alt="Downloads Totally"></a>
+ <a href="https://www.npmjs.com/package/cordova-pack"><img src="https://img.shields.io/npm/dt/cordova-pack.svg" alt="Downloads Totally"></a>
  <a href="https://www.npmjs.com/package/cordova-pack"><img src="https://img.shields.io/npm/l/cordova-pack.svg" alt="License"></a>
 </p>
 
