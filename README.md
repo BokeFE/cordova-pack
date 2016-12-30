@@ -1,12 +1,10 @@
-# Cordova-pack
-
-
-  <a href="https://travis-ci.org/zhouzhongyuan/cordova-pack"><img src="https://travis-ci.org/zhouzhongyuan/cordova-pack.svg?branch=master" alt="Build Status"></a>
+<p align="center">
+ <a href="https://travis-ci.org/zhouzhongyuan/cordova-pack"><img src="https://travis-ci.org/zhouzhongyuan/cordova-pack.svg?branch=master" alt="Build Status"></a>
 [![NPM version](https://img.shields.io/npm/v/cordova-pack.svg?style=flat)](https://www.npmjs.com/package/cordova-pack)
 [![NPM version](https://img.shields.io/npm/dm/cordova-pack.svg)](https://www.npmjs.com/package/cordova-pack)
 [![NPM version](https://img.shields.io/npm/dt/cordova-pack.svg)](https://www.npmjs.com/package/cordova-pack)
 [![NPM version](https://img.shields.io/npm/l/cordova-pack.svg)](https://www.npmjs.com/package/cordova-pack)
-
+</p>
 
 
 
